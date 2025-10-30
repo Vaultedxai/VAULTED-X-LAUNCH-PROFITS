@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAULTED X - Profits Since Launch</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
+
+    const BettingProfitChart = () => {
+      const rawData = [
+        { profit: 2.10 }, { profit: 5.10 }, { profit: 3.10 }, { profit: 1.10 }, { profit: 0.10 },
+        { profit: 2.80 }, { profit: 4.60 }, { profit: 6.20 }, { profit: 7.76 }, { profit: 10.46 },
+        { profit: 12.10 }, { profit: 11.60 }, { profit: 9.60 }, { profit: 11.348 }, { profit: 9.348 },
+        { profit: 11.548 }, { profit: 13.608 }, { profit: 12.608 }, { profit: 11.108 }, { profit: 15.908 },
+        { profit: 19.058 }, { profit: 24.858 }, { profit: 22.858 }, { profit: 24.908 }, { profit: 26.358 },
+        { profit: 28.158 }, { profit: 26.758 }, { profit: 25.758 }, { profit: 25.258 }, { profit: 23.758 },
+        { profit: 25.008 }, { profit: 27.808 }, { profit: 26.308 }, { profit: 24.308 }, { profit: 23.808 },
+        { profit: 25.608 }, { profit: 24.608 }, { profit: 26.558 }, { profit: 29.708 }, { profit: 31.808 },
+        { profit: 31.308 }, { profit: 29.808 }, { profit: 29.308 }, { profit: 30.808 }, { profit: 32.808 },
+        { profit: 34.308 }, { profit: 32.308 }, { profit: 31.808 }, { profit: 29.808 }, { profit: 27.808 },
+        { profit: 29.608 }, { profit: 28.608 }, { profit: 27.608 }, { profit: 26.108 }, { profit: 29.108 },
+        { profit: 30.608 }, { profit: 32.248 }, { profit: 31.248 }, { profit: 30.248 }, { profit: 29.948 },
+        { profit: 29.648 }, { profit: 31.048 }, { profit: 30.048 }, { profit: 28.548 }, { profit: 30.348 },
+        { profit: 28.348 }, { profit: 29.908 }, { profit: 27.908 }, { profit: 29.668 }, { profit: 27.668 },
+        { profit: 29.168 }, { profit: 28.668 }, { profit: 30.668 }, { profit: 32.428 }, { profit: 30.428 },
+        { profit: 32.428 }, { profit: 30.428 }, { profit: 28.428 }, { profit: 31.148 }, { profit: 30.148 },
+        { profit: 32.398 }, { profit: 33.998 }, { profit: 31.998 }, { profit: 30.998 }, { profit: 29.998 },
+        { profit: 31.738 }, { profit: 29.738 }, { profit: 31.838 }, { profit: 33.598 }, { profit: 31.598 },
+        { profit: 33.258 }, { profit: 32.258 }, { profit: 33.918 }, { profit: 35.838 }, { profit: 38.138 },
+        { profit: 36.138 }, { profit: 38.038 }, { profit: 39.638 }, { profit: 38.138 }, { profit: 36.138 },
+        { profit: 34.138 }, { profit: 33.138 }, { profit: 36.038 }, { profit: 35.038 }, { profit: 33.538 },
+        { profit: 31.538 }, { profit: 34.138 }, { profit: 36.298 }, { profit: 38.298 }, { profit: 37.298 },
+        { profit: 36.298 }, { profit: 38.398 }, { profit: 40.398 }, { profit: 39.398 }, { profit: 41.498 },
+        { profit: 39.998 }, { profit: 42.278 }, { profit: 40.278 }, { profit: 39.278 }, { profit: 40.628 },
+        { profit: 42.548 }, { profit: 44.648 }, { profit: 46.308 }, { profit: 48.408 }, { profit: 46.408 },
+        { profit: 44.408 }, { profit: 42.908 }, { profit: 44.858 }, { profit: 43.358 }, { profit: 41.358 },
+        { profit: 39.358 }, { profit: 41.078 }, { profit: 40.078 }, { profit: 38.078 }, { profit: 39.678 },
+        { profit: 38.178 }, { profit: 39.878 }, { profit: 41.098 }, { profit: 40.098 }, { profit: 41.698 },
+        { profit: 41.398 }, { profit: 40.398 }, { profit: 40.00 }, { profit: 38.00 }, { profit: 36.00 },
+        { profit: 37.76 }
+      ];
+
+      const data = rawData.map((item, index) => {
+        const weekNum = Math.floor(index / (rawData.length / 3)) + 1;
+        let weekLabel;
+        if (index === 0) {
+          weekLabel = 'Launch';
+        } else if (weekNum <= 3) {
+          weekLabel = `Week ${weekNum}`;
+        } else {
+          weekLabel = 'Week 3';
+        }
+        return {
+          bet: index + 1,
+          week: weekLabel,
+          profit: item.profit * 100
+        };
+      });
+
+      const currentProfit = data[data.length - 1].profit;
+
+      const CustomTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+          return (
+            <div style={{
+              backgroundColor: 'black',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
+            }}>
+              <p style={{ color: 'white', fontWeight: 'bold', fontSize: '20px', margin: 0 }}>
+                ${payload[0].value.toFixed(2)}
+              </p>
+            </div>
+          );
+        }
+        return null;
+      };
+
+      return (
+        <div style={{
+          width: '100%',
+          height: '100vh',
+          backgroundColor: 'black',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '32px'
+        }}>
+          <div style={{ width: '100%', maxWidth: '1152px' }}>
+            <div style={{ marginBottom: '64px', textAlign: 'center' }}>
+              <h1 style={{
+                fontSize: '96px',
+                fontWeight: '900',
+                color: 'white',
+                marginBottom: '24px',
+                letterSpacing: '0.05em',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                textShadow: '0 0 20px rgba(255, 255, 255, 0.4), 0 0 40px rgba(255, 255, 255, 0.2)'
+              }}>
+                VAULTED X
+              </h1>
+              <p style={{
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontSize: '20px',
+                marginBottom: '48px',
+                letterSpacing: '0.05em',
+                fontFamily: 'system-ui'
+              }}>
+                Profits Since Launch (10/10/2025)
+              </p>
+              <div style={{
+                fontSize: '72px',
+                fontWeight: '900',
+                color: 'white',
+                marginBottom: '12px',
+                fontFamily: 'system-ui'
+              }}>
+                ${currentProfit.toFixed(2)}
+              </div>
+              <p style={{
+                color: 'rgba(255, 255, 255, 0.4)',
+                fontSize: '18px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                fontFamily: 'system-ui'
+              }}>
+                Total Profit
+              </p>
+            </div>
+
+            <ResponsiveContainer width="100%" height={420}>
+              <AreaChart data={data} margin={{ top: 10, right: 50, left: 50, bottom: 50 }}>
+                <defs>
+                  <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ffffff" stopOpacity={0.5}/>
+                    <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#222222" />
+                <XAxis 
+                  dataKey="week"
+                  stroke="#555555"
+                  tick={{ fill: '#999999', fontSize: 14, fontFamily: 'system-ui' }}
+                  interval={Math.floor(rawData.length / 3) - 1}
+                  tickLine={false}
+                />
+                <YAxis 
+                  stroke="#555555"
+                  tick={{ fill: '#999999', fontSize: 14, fontFamily: 'system-ui' }}
+                  label={{ 
+                    value: 'Profit ($)', 
+                    angle: -90, 
+                    position: 'insideLeft', 
+                    fill: '#999999',
+                    style: { fontFamily: 'system-ui', fontSize: 14 }
+                  }}
+                  tickFormatter={(value) => `$${value}`}
+                  tickLine={false}
+                />
+                <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#444444', strokeWidth: 1 }} />
+                <Area 
+                  type="monotone" 
+                  dataKey="profit" 
+                  stroke="#ffffff" 
+                  strokeWidth={4}
+                  fill="url(#colorProfit)" 
+                  dot={false}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<BettingProfitChart />);
+  </script>
+</body>
+</html>
