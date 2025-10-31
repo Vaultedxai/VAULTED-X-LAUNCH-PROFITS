@@ -43,12 +43,74 @@
       font-size: 18px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin-bottom: 60px;
+      margin-bottom: 15px;
+    }
+    .units-info {
+      text-align: center;
+      color: rgba(255,255,255,0.6);
+      font-size: 16px;
+      margin-bottom: 50px;
+      line-height: 1.6;
+    }
+    .units-profit {
+      color: rgba(255,255,255,0.8);
+      font-weight: 600;
     }
     #chartContainer {
       position: relative;
       height: 450px;
       width: 100%;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 48px;
+        margin-bottom: 15px;
+      }
+      .subtitle {
+        font-size: 14px;
+        margin-bottom: 25px;
+      }
+      .profit {
+        font-size: 42px;
+        margin-bottom: 8px;
+      }
+      .label {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      .units-info {
+        font-size: 13px;
+        margin-bottom: 30px;
+      }
+      #chartContainer {
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 36px;
+      }
+      .subtitle {
+        font-size: 12px;
+      }
+      .profit {
+        font-size: 36px;
+      }
+      .label {
+        font-size: 12px;
+      }
+      .units-info {
+        font-size: 11px;
+      }
+      #chartContainer {
+        height: 250px;
+      }
     }
   </style>
 </head>
@@ -58,6 +120,10 @@
     <div class="subtitle">Profits Since Launch (10/10/2025)</div>
     <div class="profit">$3,776.00</div>
     <div class="label">Total Profit</div>
+    <div class="units-info">
+      <div class="units-profit">37.76 Units Profit</div>
+      <div>Units based on $100 per unit</div>
+    </div>
     <div id="chartContainer">
       <canvas id="chart"></canvas>
     </div>
@@ -137,9 +203,9 @@
               color: '#999', 
               maxRotation: 0,
               autoSkip: true,
-              maxTicksLimit: 4,
+              maxTicksLimit: window.innerWidth < 768 ? 3 : 4,
               font: {
-                size: 14
+                size: window.innerWidth < 768 ? 10 : 14
               }
             },
             grid: { 
@@ -151,7 +217,7 @@
             ticks: { 
               color: '#999',
               font: {
-                size: 14
+                size: window.innerWidth < 768 ? 10 : 14
               },
               callback: function(value) {
                 return '$' + value;
